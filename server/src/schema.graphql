@@ -1,0 +1,38 @@
+type Query {
+  resume(id: String!): Resume
+  resumes: [Resume!]!
+  positions: [Position!]!
+}
+
+type Mutation {
+  createDraft(title: String!, content: String): Post
+  deletePost(id: ID!): Post
+  publish(id: ID!): Post
+  createResume(name: String!, address: String!, email: String!): Resume
+  updateResume(name: String!, address: String!, email: String!): Resume
+  upsertResume(id: ID!, name: String!, address: String!, email: String!): Resume
+  createPosition(title: String!, description: String!, year: Int!): Position
+  deletePosition(id: ID!): Position
+}
+
+type Post {
+  id: ID!
+  published: Boolean!
+  title: String!
+  content: String!
+}
+
+type Resume {
+  id: ID!
+  name: String!
+  address: String!
+  email: String!
+  positions: [Position!]!
+}
+
+type Position {
+  id: ID!
+  title: String!
+  description: String!
+  year: Int!
+}
