@@ -8,7 +8,10 @@ import App from "./components/App";
 
 import "tachyons";
 
-const client = new ApolloClient({ uri: "http://localhost:4000" });
+const client = new ApolloClient({
+  uri: "https://api.github.com/graphql",
+  headers: { Authorization: `bearer ${process.env.REACT_APP_GITHUB_API_TOKEN}` }
+});
 
 ReactDOM.render(
   <ApolloProvider client={client}>

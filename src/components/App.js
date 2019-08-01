@@ -4,8 +4,8 @@ import { Router, Link } from "@reach/router";
 
 import { Layout, Menu } from "antd";
 
-import Resume from "./Resume";
-import NewResume from "./NewResume";
+import Repositories from "./Home";
+//import NewResume from "./NewResume";
 
 import "antd/dist/antd.css";
 import "./App.css";
@@ -25,10 +25,10 @@ function App() {
             style={{ lineHeight: "64px" }}
           >
             <Menu.Item key="1">
-              <Link to="/">List Resumes</Link>
+              <Link to="/">List Repositories</Link>
             </Menu.Item>
             <Menu.Item key="2">
-              <Link to="/new">New Resume</Link>
+              <Link to="#">New Resume</Link>
             </Menu.Item>
           </Menu>
         </Header>
@@ -42,8 +42,7 @@ function App() {
             }}
           >
             <Router>
-              <Resume path="/" />
-              <NewResume path="/new" />
+              <Repositories path="/" />
             </Router>
           </div>
         </Content>

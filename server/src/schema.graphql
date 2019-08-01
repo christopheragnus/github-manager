@@ -13,6 +13,7 @@ type Mutation {
   upsertResume(id: ID!, name: String!, address: String!, email: String!): Resume
   createPosition(title: String!, description: String!, year: Int!): Position
   deletePosition(id: ID!): Position
+  githubAuth(code: String!): AuthPayload!
 }
 
 type Post {
@@ -35,4 +36,15 @@ type Position {
   title: String!
   description: String!
   year: Int!
+}
+
+type AuthPayload {
+  token: String!
+  user: User!
+}
+
+type User {
+  githubLogin: ID!
+  name: String
+  avatar: String
 }
