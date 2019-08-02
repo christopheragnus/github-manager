@@ -9,17 +9,17 @@ var models = [
     embedded: false
   },
   {
-    name: "Resume",
+    name: "AuthPayload",
     embedded: false
   },
   {
-    name: "Position",
+    name: "User",
     embedded: false
   }
 ];
 exports.Prisma = prisma_lib_1.makePrismaClientClass({
   typeDefs,
   models,
-  endpoint: `https://us1.prisma.sh/public-crazyrat-613/makeschool/dev`
+  endpoint: `https://us1.prisma.sh/christopher-lam-0839b2/makeschool2/dev`
 });
 exports.prisma = new exports.Prisma();

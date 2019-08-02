@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+const fetch = require("node-fetch");
 
 const requestGithubToken = credentials =>
   fetch("https://github.com/login/oauth/access_token", {
@@ -10,6 +10,7 @@ const requestGithubToken = credentials =>
     body: JSON.stringify(credentials)
   })
     .then(res => res.json())
+    //.then(json => console.log(json))
     .catch(err => {
       throw new Error(JSON.stringify(err));
     });
@@ -21,13 +22,17 @@ const requestGithubUserAccount = token =>
       throw new Error(JSON.stringify(err));
     });
 
-const authorizeWithGithub = async credentials => {
-  const { access_token } = await requestGithubToken(credentials);
+async function authorizeWithGithub(credentials) {
+  //console.log(JSON.stringify(credentials));
+  const requestToken = await requestGithubToken(credentials);
+  const { access_token } = requestToken;
+  //console.log(access_token);
   const githubUser = await requestGithubUserAccount(access_token);
+  console.log(githubUser);
   return { ...githubUser, access_token };
-};
+}
 
-module.export = {
+module.exports = {
   requestGithubToken,
   requestGithubUserAccount,
   authorizeWithGithub

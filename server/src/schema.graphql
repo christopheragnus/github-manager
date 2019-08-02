@@ -1,21 +1,3 @@
-type Query {
-  resume(id: String!): Resume
-  resumes: [Resume!]!
-  positions: [Position!]!
-}
-
-type Mutation {
-  createDraft(title: String!, content: String): Post
-  deletePost(id: ID!): Post
-  publish(id: ID!): Post
-  createResume(name: String!, address: String!, email: String!): Resume
-  updateResume(name: String!, address: String!, email: String!): Resume
-  upsertResume(id: ID!, name: String!, address: String!, email: String!): Resume
-  createPosition(title: String!, description: String!, year: Int!): Position
-  deletePosition(id: ID!): Position
-  githubAuth(code: String!): AuthPayload!
-}
-
 type Post {
   id: ID!
   published: Boolean!
@@ -23,28 +5,29 @@ type Post {
   content: String!
 }
 
-type Resume {
-  id: ID!
-  name: String!
-  address: String!
-  email: String!
-  positions: [Position!]!
-}
-
-type Position {
-  id: ID!
-  title: String!
-  description: String!
-  year: Int!
-}
-
 type AuthPayload {
+  id: ID!
   token: String!
   user: User!
 }
 
 type User {
-  githubLogin: ID!
+  id: ID!
   name: String
+  githubLogin: String
+  githubToken: String
   avatar: String
+}
+
+type Query {
+  feed: [Post!]!
+  drafts: [Post!]!
+  post(id: ID!): Post
+}
+
+type Mutation {
+  createDraft(title: String!, content: String): Post
+  deletePost(id: ID!): Post
+  publish(id: ID!): Post
+  githubAuth(code: String!): AuthPayload!
 }
