@@ -488,7 +488,7 @@ input UserWhereInput {
 
 input UserWhereUniqueInput {
   id: ID
-  githubLogin: String
+  githubToken: String
 }
 `
       }

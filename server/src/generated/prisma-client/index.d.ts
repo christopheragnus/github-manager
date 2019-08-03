@@ -384,7 +384,7 @@ export interface PostWhereInput {
 
 export type UserWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
-  githubLogin?: Maybe<String>;
+  githubToken?: Maybe<String>;
 }>;
 
 export interface AuthPayloadCreateInput {

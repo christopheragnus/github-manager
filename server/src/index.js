@@ -5,6 +5,9 @@ const { authorizeWithGithub } = require("./lib.js");
 
 const resolvers = {
   Query: {
+    me: (parent, args, context) => {
+      return context.currentUser;
+    },
     feed: (parent, args, context) => {
       return context.prisma.posts({ where: { published: true } });
     },
@@ -44,11 +47,11 @@ const resolvers = {
 
       const user = await context.prisma.upsertUser({
         where: {
-          githubLogin: login
+          githubToken: access_token
         },
         update: {
           name,
-          githubToken: access_token,
+          githubLogin: login,
           avatar: avatar_url
         },
         create: {
@@ -75,12 +78,22 @@ const resolvers = {
   }
 };
 
+async function context({ request }) {
+  const githubToken = request.headers.authorization || "";
+  const currentUser = await prisma.user({ githubToken });
+  console.log(currentUser);
+  return { prisma, currentUser };
+}
+
 const server = new GraphQLServer({
   typeDefs: "./src/schema.graphql",
   resolvers,
-  context: {
-    prisma
-  }
+  context
 });
+
+// server.express.use((req, res, next) => {
+//   HeaderGrabber(req);
+//   next();
+// });
 
 server.start(() => console.log("Server is running on http://localhost:4000"));

@@ -14,8 +14,8 @@ type AuthPayload {
 type User {
   id: ID! @id
   name: String
-  githubLogin: String @unique
-  githubToken: String
+  githubLogin: String
+  githubToken: String @unique
   avatar: String
 }
 
