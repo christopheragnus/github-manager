@@ -23,6 +23,7 @@ type Query {
   feed: [Post!]!
   drafts: [Post!]!
   post(id: ID!): Post
+  githubLoginUrl: String!
   me: User
 }
 

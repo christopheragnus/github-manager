@@ -8,6 +8,11 @@ const resolvers = {
     me: (parent, args, context) => {
       return context.currentUser;
     },
+    githubLoginUrl: () => {
+      return `https://github.com/login/oauth/authorize?client_id=${
+        process.env.CLIENT_ID
+      }&scope=user`;
+    },
     feed: (parent, args, context) => {
       return context.prisma.posts({ where: { published: true } });
     },
@@ -43,15 +48,13 @@ const resolvers = {
         avatar: avatar_url
       };
 
-      console.log(latestUserInfo);
-
       const user = await context.prisma.upsertUser({
         where: {
           githubToken: access_token
         },
         update: {
           name,
-          githubLogin: login,
+          githubToken: access_token,
           avatar: avatar_url
         },
         create: {
@@ -79,10 +82,13 @@ const resolvers = {
 };
 
 async function context({ request }) {
-  const githubToken = request.headers.authorization || "";
-  const currentUser = await prisma.user({ githubToken });
-  console.log(currentUser);
-  return { prisma, currentUser };
+  const header = request.headers.authorization;
+  if (header) {
+    const githubToken = request.headers.authorization.split(" ")[1];
+    const currentUser = await prisma.user({ githubToken });
+    return { prisma, currentUser };
+  }
+  return { prisma };
 }
 
 const server = new GraphQLServer({

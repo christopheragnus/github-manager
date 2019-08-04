@@ -1,10 +1,11 @@
 import React from "react";
 
 import { Router, Link } from "@reach/router";
-
 import { Layout, Menu } from "antd";
 
 import Repositories from "./Home";
+import Login from "./Login";
+import Callback from "./Callback";
 //import NewResume from "./NewResume";
 
 import "antd/dist/antd.css";
@@ -28,7 +29,7 @@ function App() {
               <Link to="/">List Repositories</Link>
             </Menu.Item>
             <Menu.Item key="2">
-              <Link to="#">New Resume</Link>
+              <Link to="/login">Login</Link>
             </Menu.Item>
           </Menu>
         </Header>
@@ -43,6 +44,8 @@ function App() {
           >
             <Router>
               <Repositories path="/" />
+              <Login path="/login" />
+              <Callback path="/callback" />
             </Router>
           </div>
         </Content>
