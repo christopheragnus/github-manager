@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Router, Link } from "@reach/router";
+import { Router, Link, navigate } from "@reach/router";
 import { Layout, Menu } from "antd";
 
 import Repositories from "./Home";
@@ -43,8 +43,7 @@ function App() {
             }}
           >
             <Router>
-              <Repositories path="/" />
-              <Login path="/login" />
+              <Login path="/" />
               <Callback path="/callback" />
             </Router>
           </div>

@@ -1,5 +1,20 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
+import { navigate } from "@reach/router";
 import styled from "styled-components";
+import { gql } from "apollo-boost";
+import { Mutation } from "react-apollo";
+
+const GITHUB_AUTH = gql`
+  mutation GithubAuth($code: String!) {
+    githubAuth(code: $code) {
+      token
+      user {
+        id
+        name
+      }
+    }
+  }
+`;
 
 const Button = styled.button`
   color: #fff;
@@ -26,16 +41,41 @@ const Button = styled.button`
   }
 `;
 
+function LoginButton(props) {
+  const { requestCode } = props;
+  return <Button onClick={() => requestCode()}>Login with Github</Button>;
+}
+
 export default function Login() {
+  var mutation;
+
+  useEffect(() => {
+    if (window.location.search.match(/code=/)) {
+      const code = window.location.search.replace("?code=", "");
+      mutation({ variables: { code } });
+    }
+  });
+
+  const requestCode = () => {
+    window.location = `https://github.com/login/oauth/authorize?client_id=${
+      process.env.REACT_APP_CLIENT_ID
+    }`;
+  };
+
+  const authComplete = () => {
+    navigate("/", { replace: true });
+  };
+
   return (
-    <div>
-      <a
-        href={`https://github.com/login/oauth/authorize?client_id=${
-          process.env.REACT_APP_CLIENT_ID
-        }`}
-      >
-        <Button>Login with Github</Button>
-      </a>
-    </div>
+    <Mutation mutation={GITHUB_AUTH} update={authComplete}>
+      {mutate => {
+        mutation = mutate;
+        return (
+          <div>
+            <LoginButton mutate={mutate} requestCode={requestCode} />
+          </div>
+        );
+      }}
+    </Mutation>
   );
 }

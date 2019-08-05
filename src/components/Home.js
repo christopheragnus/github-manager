@@ -19,7 +19,7 @@ const Container = styled.div`
 
 export default function Repositories() {
   return (
-    <Query query={STARRED_REPOS} variables={{ id }}>
+    {/* <Query query={STARRED_REPOS} variables={{ id }}>
       {({ data, loading, error, refetch }) => {
         if (loading) {
           return (
@@ -46,7 +46,7 @@ export default function Repositories() {
           </Container>
         );
       }}
-    </Query>
+    </Query> */}
   );
 }
 
