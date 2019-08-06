@@ -3,7 +3,7 @@ import React from "react";
 import { Router, Link, navigate } from "@reach/router";
 import { Layout, Menu } from "antd";
 
-import Repositories from "./Home";
+import List from "./List";
 import Login from "./Login";
 import Callback from "./Callback";
 //import NewResume from "./NewResume";
@@ -26,7 +26,7 @@ function App() {
             style={{ lineHeight: "64px" }}
           >
             <Menu.Item key="1">
-              <Link to="/">List Repositories</Link>
+              <Link to="/list">List Repositories</Link>
             </Menu.Item>
             <Menu.Item key="2">
               <Link to="/login">Login</Link>
@@ -43,13 +43,14 @@ function App() {
             }}
           >
             <Router>
-              <Login path="/" />
+              <List path="/list" />
+              <Login path="/login" />
               <Callback path="/callback" />
             </Router>
           </div>
         </Content>
         <Footer style={{ textAlign: "center" }}>
-          Resume-O-Tron by Christopher Lam
+          Github Manager by Christopher Lam
         </Footer>
       </Layout>
     </div>
