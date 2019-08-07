@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { Query } from "react-apollo";
 import { gql } from "apollo-boost";
 import styled from "styled-components";
+import Star from "./Star";
 
 import "./App.css";
 
@@ -53,16 +54,27 @@ const Container = styled.div`
   justify-content: center;
 `;
 
+const Alert = styled.div`
+  border: 1px solid #b7eb8f;
+  background-color: #f6ffed;
+  border-radius: 3px;
+  font-size: 14px;
+  padding: 8px 15px 8px 15px;
+`;
+
 const STARRED_REPOS = gql`
-  query {
+  query($after: String) {
     viewer {
-      starredRepositories(first: 24) {
+      starredRepositories(first: 24, after: $after) {
         pageInfo {
           startCursor
           endCursor
+          hasNextPage
+          hasPreviousPage
         }
 
         nodes {
+          id
           name
           shortDescriptionHTML
           url
@@ -82,36 +94,53 @@ const STARRED_REPOS = gql`
 `;
 
 function List() {
-  const [cursor, setCursor] = useState(null);
   return (
-    <Container>
-      <Query query={STARRED_REPOS}>
-        {({ loading, error, data }) => {
-          if (loading) return "Loading...";
-          if (error) return "Error.";
+    <div>
+      <h2>List of Starred Repositories</h2>
+      <Container>
+        <Query query={STARRED_REPOS}>
+          {({ loading, error, data, fetchMore }) => {
+            {
+              /* const {
+              startCursor,
+              hasNextPage,
+              hasPreviousPage
+            } = data.viewer.pageInfo; */
+            }
+            if (loading) return "Loading...";
+            if (error) return "Error.";
 
-          return data.viewer.starredRepositories.nodes.map((item, index) => (
-            <ProfileCard key={index}>
-              <Col>
-                <CardCover img={item.openGraphImageUrl} />
-              </Col>
+            return data.viewer.starredRepositories.nodes.map((node, index) => (
+              <ProfileCard key={index}>
+                <Col>
+                  <CardCover img={node.openGraphImageUrl} />
+                </Col>
 
-              <CardBody>
-                <Ul>
-                  <Li>Repository Name: {item.name}</Li>
-                  <Li>Description: {item.shortDescriptionHTML} </Li>
-                  <Li>No. of Stars: {item.stargazers.totalCount}</Li>
-                  <Li>Repository Owner: {item.owner.login}</Li>
-                  <Li>
-                    <a href={item.url}>Link</a>
-                  </Li>
-                </Ul>
-              </CardBody>
-            </ProfileCard>
-          ));
-        }}
-      </Query>
-    </Container>
+                <CardBody>
+                  <Ul>
+                    <Li>Repository Name: {node.name}</Li>
+                    <Li>Description: {node.shortDescriptionHTML} </Li>
+                    <Li>No. of Stars: {node.stargazers.totalCount}</Li>
+                    <Li>Repository Owner: {node.owner.login}</Li>
+                    <Li>
+                      <a href={node.url}>Link</a>
+                    </Li>
+                    <Li>
+                      {
+                        <Star
+                          id={node.id}
+                          viewerHasStarred={node.viewerHasStarred}
+                        />
+                      }
+                    </Li>
+                  </Ul>
+                </CardBody>
+              </ProfileCard>
+            ));
+          }}
+        </Query>
+      </Container>
+    </div>
   );
 }
 

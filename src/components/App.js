@@ -6,6 +6,7 @@ import { Layout, Menu } from "antd";
 import List from "./List";
 import Login from "./Login";
 import Callback from "./Callback";
+import SearchPage from "./Search";
 //import NewResume from "./NewResume";
 
 import "antd/dist/antd.css";
@@ -29,6 +30,9 @@ function App() {
               <Link to="/list">List Repositories</Link>
             </Menu.Item>
             <Menu.Item key="2">
+              <Link to="/search">Find Repositories</Link>
+            </Menu.Item>
+            <Menu.Item key="3">
               <Link to="/login">Login</Link>
             </Menu.Item>
           </Menu>
@@ -44,8 +48,9 @@ function App() {
           >
             <Router>
               <List path="/list" />
-              <Login path="/login" />
+              <Login path="/" />
               <Callback path="/callback" />
+              <SearchPage path="/search" />
             </Router>
           </div>
         </Content>

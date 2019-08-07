@@ -125,7 +125,7 @@ export default function Login() {
         if (authData) {
           let token = authData.githubAuth.token;
           localStorage.setItem("token", token);
-          navigate("/", { replace: true });
+          //navigate("/", { replace: true });
         }
         return null;
       }
@@ -137,7 +137,7 @@ export default function Login() {
   const requestCode = () => {
     window.location = `https://github.com/login/oauth/authorize?client_id=${
       process.env.REACT_APP_CLIENT_ID
-    }`;
+    }&scope=user public_repo gist`;
   };
 
   return (

@@ -12,7 +12,7 @@ const resolvers = {
     githubLoginUrl: () => {
       return `https://github.com/login/oauth/authorize?client_id=${
         process.env.CLIENT_ID
-      }&scope=user`;
+      }`;
     },
     feed: (parent, args, context) => {
       return context.prisma.posts({ where: { published: true } });
