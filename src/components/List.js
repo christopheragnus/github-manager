@@ -31,6 +31,7 @@ const CardBody = styled.div`
 
 const Li = styled.li`
   list-style: none;
+  word-break: break-all;
 `;
 
 const CardCover = styled.div`

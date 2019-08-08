@@ -23,7 +23,7 @@ function App() {
           <Menu
             theme="dark"
             mode="horizontal"
-            defaultSelectedKeys={["1"]}
+            defaultSelectedKeys={["3"]}
             style={{ lineHeight: "64px" }}
           >
             <Menu.Item key="1">
@@ -47,10 +47,9 @@ function App() {
             }}
           >
             <Router>
-              <List path="/list" />
               <Login path="/" />
-              <Callback path="/callback" />
               <SearchPage path="/search" />
+              <List path="/list" />
             </Router>
           </div>
         </Content>
