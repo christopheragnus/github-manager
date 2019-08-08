@@ -1,15 +1,16 @@
 /* eslint-disable no-console */
 /* eslint-disable no-inner-declarations */
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { navigate } from "@reach/router";
 import styled from "styled-components";
 import { gql } from "apollo-boost";
-import { Mutation, Query } from "react-apollo";
+import { Query } from "react-apollo";
+import { FaGithub } from "react-icons/fa";
 
 const Button = styled.button`
   color: #fff;
-  background-color: #1890ff;
-  border-color: #1890ff;
+  background-color: ${props => (props.danger ? "#ff4d4f;" : "#1890ff;")}
+  border-color: ${props => (props.danger ? "#ff4d4f;" : "#1890ff;")}
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
   font-weight: 400;
@@ -26,8 +27,9 @@ const Button = styled.button`
   border-radius: 4px;
 
   &:hover {
-    background-color: #73bcff;
+    background-color: ${props => (props.danger ? "#ffa6a7;" : "#73bcff;")}
     transition: opacity 0.1s;
+    cursor: pointer;
   }
 `;
 
@@ -55,36 +57,91 @@ const CardCover = styled.div`
   width: 100px;
 `;
 
+const Container = styled.div`
+  padding: 0.5em;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+`;
+
+const Alert = styled.div`
+  border: 1px solid #b7eb8f;
+  background-color: #f6ffed;
+  border-radius: 3px;
+  font-size: 14px;
+  padding: 8px 15px 8px 15px;
+  margin: 1em;
+`;
+
 function LoginButton(props) {
   const { requestCode } = props;
-  return <Button onClick={() => requestCode()}>Login with Github</Button>;
+
+  const Logout = () => {
+    localStorage.removeItem("token");
+    navigate("/", { replace: true });
+  };
+  return (
+    <div>
+      {localStorage.getItem("token") ? (
+        <Button danger onClick={() => Logout()}>
+          Logout
+        </Button>
+      ) : (
+        <Button onClick={() => requestCode()}>
+          Login with Github <FaGithub />
+        </Button>
+      )}
+    </div>
+  );
 }
 
-// function Profile() {
-//   return (
-//     <Query query={}>
-//       {({ loading, error, data }) => {
-//         if (loading) return "Loading...";
-//         if (error) return "Error.";
+const PROFILE_QUERY = gql`
+  query {
+    viewer {
+      login
+      name
+      bio
+      avatarUrl
+      repositories {
+        totalCount
+      }
+      followers {
+        totalCount
+      }
+    }
+  }
+`;
 
-//         return (
-//           data.me &&
-//           [data.me].map((item, index) => (
-//             <ProfileCard key={index}>
-//               <CardCover>
-//                 <img src={item.avatar} />
-//               </CardCover>
-//               <ul>
-//                 <Li>Github Username: {item.githubLogin}</Li>
-//                 <Li>Full Name: {item.name}</Li>
-//               </ul>
-//             </ProfileCard>
-//           ))
-//         );
-//       }}
-//     </Query>
-//   );
-// }
+function Profile() {
+  return (
+    <div>
+      <h2>Your Profile</h2>
+      <Query query={PROFILE_QUERY}>
+        {({ loading, error, data }) => {
+          if (loading) return "Loading...";
+          if (error) return "Error.";
+
+          return [data.viewer].map((item, index) => (
+            <ProfileCard key={index}>
+              <CardCover>
+                <img src={item.avatarUrl} />
+              </CardCover>
+              <ul>
+                <Li>Github Username: {item.login}</Li>
+                <Li>Full Name: {item.name}</Li>
+                <Li>Bio: {item.bio}</Li>
+                <Li>No. of repositories: {item.repositories.totalCount}</Li>
+                <Li>No. of followers: {item.followers.totalCount}</Li>
+              </ul>
+            </ProfileCard>
+          ));
+        }}
+      </Query>
+    </div>
+  );
+}
 
 export default function Login() {
   const [authData, setAuthData] = useState(null);
@@ -125,7 +182,7 @@ export default function Login() {
         if (authData) {
           let token = authData.githubAuth.token;
           localStorage.setItem("token", token);
-          //navigate("/", { replace: true });
+          navigate("/", { replace: true });
         }
         return null;
       }
@@ -141,8 +198,14 @@ export default function Login() {
   };
 
   return (
-    <div>
+    <Container>
+      {localStorage.getItem("token") ? (
+        <Profile />
+      ) : (
+        <Alert>{"Not logged in yet."}</Alert>
+      )}
+
       <LoginButton requestCode={requestCode} />
-    </div>
+    </Container>
   );
 }

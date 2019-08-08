@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Query } from "react-apollo";
 import { gql } from "apollo-boost";
 import styled from "styled-components";
@@ -33,10 +33,6 @@ const Li = styled.li`
   list-style: none;
 `;
 
-const Ul = styled.ul`
-  list-style: none;
-`;
-
 const CardCover = styled.div`
   background-image: url(${props => props.img});
   background-size: cover;
@@ -52,14 +48,6 @@ const Container = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-`;
-
-const Alert = styled.div`
-  border: 1px solid #b7eb8f;
-  background-color: #f6ffed;
-  border-radius: 3px;
-  font-size: 14px;
-  padding: 8px 15px 8px 15px;
 `;
 
 const STARRED_REPOS = gql`
@@ -96,17 +84,10 @@ const STARRED_REPOS = gql`
 function List() {
   return (
     <div>
-      <h2>List of Starred Repositories</h2>
+      <h2>List of Your Starred Repositories</h2>
       <Container>
         <Query query={STARRED_REPOS}>
-          {({ loading, error, data, fetchMore }) => {
-            {
-              /* const {
-              startCursor,
-              hasNextPage,
-              hasPreviousPage
-            } = data.viewer.pageInfo; */
-            }
+          {({ loading, error, data }) => {
             if (loading) return "Loading...";
             if (error) return "Error.";
 
@@ -117,7 +98,7 @@ function List() {
                 </Col>
 
                 <CardBody>
-                  <Ul>
+                  <ul>
                     <Li>Repository Name: {node.name}</Li>
                     <Li>Description: {node.shortDescriptionHTML} </Li>
                     <Li>No. of Stars: {node.stargazers.totalCount}</Li>
@@ -133,7 +114,7 @@ function List() {
                         />
                       }
                     </Li>
-                  </Ul>
+                  </ul>
                 </CardBody>
               </ProfileCard>
             ));

@@ -33,7 +33,7 @@ function App() {
               <Link to="/search">Find Repositories</Link>
             </Menu.Item>
             <Menu.Item key="3">
-              <Link to="/login">Login</Link>
+              <Link to="/">Login</Link>
             </Menu.Item>
           </Menu>
         </Header>
