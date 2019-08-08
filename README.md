@@ -1,4 +1,4 @@
-# Resume-O-Tron by Christopher Lam
+# Github Manager by Christopher Lam
 
 How to run:
 
